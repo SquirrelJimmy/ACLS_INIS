@@ -1,2 +1,2 @@
-# ACLS_INIS
-minhome rules
+# 自用规则
+minhome 自用规则
