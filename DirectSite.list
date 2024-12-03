@@ -1,3 +1,7 @@
 # 内容：匹配直连网站
 # 域名后缀匹配
 DOMAIN-SUFFIX,getui.com
+#DOMAIN-SUFFIX,ug.link
+#DOMAIN-SUFFIX,ugnas.com
+DOMAIN-KEYWORD,ug
+DOMAIN-KEYWORD,ugnas
