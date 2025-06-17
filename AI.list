@@ -3,7 +3,9 @@
 # DOMAIN-KEYWORD,openai
 # DOMAIN-KEYWORD,anthropic
 # DOMAIN-KEYWORD,Claude
+DOMAIN-KEYWORD,googleapis
 # 域名后缀匹配
+DOMAIN,generativelanguage.googleapis.com
 DOMAIN,copilot.microsoft.com
 DOMAIN-SUFFIX,bing.com
 DOMAIN-SUFFIX,meta.ai
