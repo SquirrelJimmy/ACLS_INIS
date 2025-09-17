@@ -3,6 +3,7 @@
 # DOMAIN-KEYWORD,openai
 # DOMAIN-KEYWORD,anthropic
 # DOMAIN-KEYWORD,Claude
+DOMAIN-KEYWORD,ai.google
 DOMAIN-KEYWORD,googleapis
 # 域名后缀匹配
 DOMAIN,generativelanguage.googleapis.com
