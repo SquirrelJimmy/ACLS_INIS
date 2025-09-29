@@ -62,7 +62,7 @@
         "server": "google"
       },
       {
-        "rule_set": ["geosite-cn", "geosite-steamcn", "geosite-apple"],
+        "rule_set": ["geosite-cn", "SteamCN", "Apple"],
         "server": "local"
       },
       {
