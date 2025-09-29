@@ -106,6 +106,12 @@
       "type": "mixed",
       "listen": "127.0.0.1",
       "listen_port": 7890
+    },
+    {
+      "tag": "redirect-in",
+      "type": "redirect",
+      "listen": "::",
+      "listen_port": 7891
     }
   ],
   "outbounds": [
