@@ -769,7 +769,7 @@
         "tag": "ProxyMedia",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-media@!cn.srs",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-media.srs",
         "download_detour": "direct"
       },
       {
