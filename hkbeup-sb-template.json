@@ -1,0 +1,773 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "ui",
+      "secret": "",
+      "external_ui_download_url": "https://gh-proxy.com/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "direct",
+      "default_mode": "rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true,
+      "store_rdrc": true
+    }
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "google",
+        "type": "tls",
+        "server": "8.8.8.8",
+        "detour": "Proxy"
+      },
+      {
+        "tag": "local",
+        "type": "https",
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "fakeip",
+        "type": "fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
+      }
+    ],
+    "rules": [
+      {
+        "clash_mode": "direct",
+        "server": "local"
+      },
+      {
+        "clash_mode": "global",
+        "server": "google"
+      },
+      {
+        "query_type": ["A", "AAAA"],
+        "rule_set": "geosite-cn",
+        "server": "fakeip"
+      },
+      {
+        "rule_set": "geosite-cn",
+        "server": "local"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "geosite-geolocation-!cn",
+            "invert": true
+          },
+          {
+            "rule_set": "geoip-cn"
+          }
+        ],
+        "server": "google",
+        "client_subnet": "114.114.114.114/24"
+      },
+      {
+        "query_type": ["A", "AAAA"],
+        "server": "fakeip"
+      }
+    ],
+    "independent_cache": true,
+    "strategy": "prefer_ipv4"
+  },
+  "inbounds": [
+    {
+      "tag": "tun-in",
+      "type": "tun",
+      "address": ["172.19.0.0/30", "fdfe:dcba:9876::0/126"],
+      "stack": "system",
+      "auto_route": true,
+      "strict_route": true,
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 7890
+        }
+      }
+    },
+    {
+      "tag": "mixed-in",
+      "type": "mixed",
+      "listen": "127.0.0.1",
+      "listen_port": 7890
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "🚀 节点选择",
+      "type": "selector",
+      "outbounds": [
+        "♻️ 自动选择",
+        "✋🏻 手动切换",
+        "direct",
+        "🇭🇰 香港组",
+        "🇨🇳 台湾组",
+        "🇲🇴 澳门组",
+        "🇯🇵 日本组",
+        "🇰🇷 韩国组",
+        "🇸🇬 新加坡组",
+        "🇺🇸 美国组",
+        "🇨🇦 加拿大组",
+        "🇬🇧 英国组",
+        "🇩🇪 德国组",
+        "🇫🇷 法国组",
+        "🇦🇺 澳大利亚组",
+        "🇻🇳 越南组",
+        "🇹🇭 泰国组",
+        "🇮🇳 印度组",
+        "🇵🇭 菲律宾组"
+      ]
+    },
+    {
+      "tag": "✋🏻 手动切换",
+      "type": "selector",
+      "outbounds": ["{all}"]
+    },
+    {
+      "tag": "♻️ 自动选择",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "exclude", "keywords": ["网站|地址|剩余|过期|时间|有效"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🤖 AI",
+      "type": "selector",
+      "outbounds": ["🇯🇵 日本组", "🇰🇷 韩国组", "🇸🇬 新加坡组", "🇺🇸 美国组", "🇨🇦 加拿大组", "🇬🇧 英国组"]
+    },
+    {
+      "tag": "🤖 OpenAI",
+      "type": "selector",
+      "outbounds": ["🇺🇸 美国组", "🇨🇦 加拿大组", "🇬🇧 英国组", "🇩🇪 德国组", "🇫🇷 法国组"],
+      "default": "🇺🇸 美国组"
+    },
+    {
+      "tag": "📲 电报消息",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "♻️ 自动选择", "🇭🇰 香港组", "🇸🇬 新加坡组", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "📹 油管视频",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "♻️ 自动选择", "🇭🇰 香港组", "🇯🇵 日本组", "🇸🇬 新加坡组", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "🎥 奈飞视频",
+      "type": "selector",
+      "outbounds": ["🎥 奈飞节点", "🇭🇰 香港组", "🇨🇳 台湾组", "🇸🇬 新加坡组", "🇯🇵 日本组", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "🎥 奈飞节点",
+      "type": "selector",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["NF|奈飞|解锁|Netflix|NETFLIX|Media"] }]
+    },
+    {
+      "tag": "📺 哔哩哔哩",
+      "type": "selector",
+      "outbounds": ["🎯 全球直连"]
+    },
+    {
+      "tag": "📺 哔哩哔哩港澳台",
+      "type": "selector",
+      "outbounds": ["🎯 全球直连", "🇭🇰 香港组", "🇲🇴 澳门组", "🇨🇳 台湾组"]
+    },
+    {
+      "tag": "🎵 TikTok",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "🇭🇰 香港组", "🇨🇳 台湾组", "🇸🇬 新加坡组", "🇯🇵 日本组", "🇺🇸 美国组"],
+      "default": "🇯🇵 日本组"
+    },
+    {
+      "tag": "🌍 国外媒体",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "♻️ 自动选择", "🇭🇰 香港组", "🇨🇳 台湾组", "🇸🇬 新加坡组", "🇯🇵 日本组", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "🌏 国内媒体",
+      "type": "selector",
+      "outbounds": ["direct", "🇭🇰 香港组", "🇨🇳 台湾组"]
+    },
+    {
+      "tag": "📢 谷歌FCM",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇭🇰 香港组", "🇸🇬 新加坡组", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "Ⓜ️ 微软Bing",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "Ⓜ️ 微软云盘",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "Ⓜ️ 微软服务",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "🍎 苹果服务",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "💻 GitHub",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "direct", "🇺🇸 美国组"]
+    },
+    {
+      "tag": "🎶 网易音乐",
+      "type": "selector",
+      "outbounds": ["direct"],
+      "filter": [{ "action": "include", "keywords": ["网易|音乐|解锁|Music|NetEase"] }]
+    },
+    {
+      "tag": "🎯 全球直连",
+      "type": "selector",
+      "outbounds": ["direct", "🚀 节点选择"]
+    },
+    {
+      "tag": "🛑 广告拦截",
+      "type": "selector",
+      "outbounds": ["reject", "direct"]
+    },
+    {
+      "tag": "🍃 应用净化",
+      "type": "selector",
+      "outbounds": ["reject", "direct"]
+    },
+    {
+      "tag": "🐟 漏网之鱼",
+      "type": "selector",
+      "outbounds": ["🚀 节点选择", "♻️ 自动选择", "direct"]
+    },
+    {
+      "tag": "🇭🇰 香港组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇭🇰|HK|hk|香港|港|HongKong"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇨🇳 台湾组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇹🇼|TW|tw|台湾|臺灣|台|Taiwan"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇲🇴 澳门组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇲🇴|MO|mo|澳门|Macau"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇯🇵 日本组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇯🇵|JP|jp|日本|日|Japan|东京|大阪"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇰🇷 韩国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇰🇷|KR|kr|韩国|韩|Korea|首尔"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇸🇬 新加坡组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇸🇬|SG|sg|新加坡|狮|Singapore"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇺🇸 美国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇺🇸|US|us|美国|美|United States|洛杉矶|西雅图"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 150
+    },
+    {
+      "tag": "🇨🇦 加拿大组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇨🇦|CA|ca|加拿大|Canada|多伦多"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 150
+    },
+    {
+      "tag": "🇬🇧 英国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇬🇧|GB|gb|英国|UK|United Kingdom"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇩🇪 德国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇩🇪|DE|de|德国|Germany"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇫🇷 法国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇫🇷|FR|fr|法国|France|马赛"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇦🇺 澳大利亚组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇦🇺|AU|au|澳大利亚|Australia"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇻🇳 越南组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇻🇳|VN|vn|越南|Vietnam"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇹🇭 泰国组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇹🇭|TH|th|泰国|Thailand"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇮🇳 印度组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇮🇳|IN|in|印度|India"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🇵🇭 菲律宾组",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "filter": [{ "action": "include", "keywords": ["🇵🇭|PH|ph|菲律宾|Philippines"] }],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "reject"
+    }
+  ],
+  "route": {
+    "default_domain_resolver": {
+      "server": "local"
+    },
+    "auto_detect_interface": true,
+    "final": "🚀 节点选择",
+    "rules": [
+      {
+        "inbound": ["tun-in", "mixed-in"],
+        "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
+      },
+      {
+        "rule_set": "DirectProcessName",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "DirectSite",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "LocalAreaNetwork",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "UnBan",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "BanAD",
+        "clash_mode": "rule",
+        "outbound": "🛑 广告拦截"
+      },
+      {
+        "rule_set": "BanProgramAD",
+        "clash_mode": "rule",
+        "outbound": "🍃 应用净化"
+      },
+      {
+        "rule_set": "GoogleCN",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "SteamCN",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "NetEaseMusic",
+        "outbound": "🎶 网易音乐"
+      },
+      {
+        "rule_set": "OpenAi",
+        "outbound": "🤖 OpenAI"
+      },
+      {
+        "rule_set": "AI",
+        "outbound": "🤖 AI"
+      },
+      {
+        "rule_set": "GoogleFCM",
+        "outbound": "📢 谷歌FCM"
+      },
+      {
+        "rule_set": "Bing",
+        "outbound": "Ⓜ️ 微软Bing"
+      },
+      {
+        "rule_set": "OneDrive",
+        "outbound": "Ⓜ️ 微软云盘"
+      },
+      {
+        "rule_set": "Microsoft",
+        "outbound": "Ⓜ️ 微软服务"
+      },
+      {
+        "rule_set": "Apple",
+        "outbound": "🍎 苹果服务"
+      },
+      {
+        "rule_set": "Telegram",
+        "outbound": "📲 电报消息"
+      },
+      {
+        "rule_set": "GitHub",
+        "outbound": "💻 GitHub"
+      },
+      {
+        "rule_set": "YouTube",
+        "outbound": "📹 油管视频"
+      },
+      {
+        "rule_set": "Netflix",
+        "outbound": "🎥 奈飞视频"
+      },
+      {
+        "rule_set": "BilibiliHMT",
+        "outbound": "📺 哔哩哔哩港澳台"
+      },
+      {
+        "rule_set": "Bilibili",
+        "outbound": "📺 哔哩哔哩"
+      },
+      {
+        "rule_set": "TikTok",
+        "outbound": "🎵 TikTok"
+      },
+      {
+        "rule_set": "ChinaMedia",
+        "outbound": "🌏 国内媒体"
+      },
+      {
+        "rule_set": "ProxyMedia",
+        "outbound": "🌍 国外媒体"
+      },
+      {
+        "rule_set": "ProxyGFWlist",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "rule_set": ["geoip-cn", "geosite-cn"],
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "domain": ["clash.razord.top", "yacd.metacubex.one", "yacd.haishan.me", "d.metacubex.one"],
+        "outbound": "direct"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "DirectProcessName",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SquirrelJimmy/sing-box-geosite/main/rule/DirectProcessName.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "DirectSite",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SquirrelJimmy/sing-box-geosite/main/rule/DirectSite.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "LocalAreaNetwork",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "UnBan",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "BanAD",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "BanProgramAD",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "GoogleCN",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "SteamCN",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "NetEaseMusic",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/NetEaseMusic.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "OpenAi",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "AI",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SquirrelJimmy/sing-box-geosite/main/rule/AI.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "GoogleFCM",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Bing",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Bing.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "OneDrive",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/OneDrive.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Microsoft",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/microsoft.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Apple",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/apple.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "GitHub",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/github.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "YouTube",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/youtube.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Netflix",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/netflix.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "BilibiliHMT",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/BilibiliHMT.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "Bilibili",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "TikTok",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/tiktok.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "ChinaMedia",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "ProxyMedia",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "ProxyGFWlist",
+        "type": "remote",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geosite-geolocation-!cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+        "download_detour": "direct"
+      }
+    ]
+  }
+}
