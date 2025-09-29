@@ -28,8 +28,14 @@
       },
       {
         "tag": "local",
-        "type": "https",
+        "type": "udp",
         "server": "223.5.5.5"
+      },
+      {
+        "tag": "public",
+        "type": "https",
+        "server": "dns.alidns.com",
+        "domain_resolver": "local"
       },
       {
         "tag": "fakeip",
@@ -46,6 +52,18 @@
       {
         "clash_mode": "global",
         "server": "google"
+      },
+      {
+        "query_type": "HTTPS",
+        "action": "reject"
+      },
+      {
+        "domain_suffix": ["services.googleapis.cn", "googleapis.cn", "xn--ngstr-lra8j.com"],
+        "server": "google"
+      },
+      {
+        "rule_set": ["geosite-cn", "geosite-steamcn", "geosite-apple"],
+        "server": "local"
       },
       {
         "query_type": ["A", "AAAA"],
@@ -73,11 +91,14 @@
       },
       {
         "query_type": ["A", "AAAA"],
-        "server": "fakeip"
+        "server": "fakeip",
+        "rewrite_ttl": 1
       }
     ],
+    "final": "google",
+    "strategy": "ipv4_only",
     "independent_cache": true,
-    "strategy": "prefer_ipv4"
+    "reverse_mapping": true
   },
   "inbounds": [
     {
